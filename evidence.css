@@ -1,0 +1,10 @@
+#line-note{margin:4px 0 10px;padding:7px 10px;border-left:3px solid #e9c67c;background:#493c2d;color:#ffe5ba;font-size:12px;line-height:1.5}
+.exhibit-monitor{position:relative;overflow:hidden;background:#121e1d;border:7px solid #263330;border-radius:8px;color:#f0f4e9}
+.exhibit-monitor canvas{display:block;width:100%;height:auto;aspect-ratio:16/9}
+.exhibit-monitor-label{position:absolute;z-index:1;top:8px;left:10px;right:10px;display:flex;gap:12px;justify-content:space-between;pointer-events:none;font-size:12px;line-height:1.2}
+.exhibit-monitor-label>*{padding:4px 6px;background:#101816e8;border-radius:3px}
+.exhibit-missing{padding:8px 12px}
+.appraisal-page h4{font-size:16px;margin:14px 0 4px}
+.appraisal-page .appraisal-end{margin:22px 0 14px;text-align:right}
+#court-exhibit{position:absolute;right:5vw;top:34%;z-index:3;max-width:40vw}
+@media(max-width:700px){#court-exhibit{right:4vw;top:27%}#line-note{font-size:11px}}

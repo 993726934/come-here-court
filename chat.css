@@ -1,0 +1,34 @@
+.chat-phone{background:#eef0eb;color:#202722;border:5px solid #292e2b;border-radius:22px;overflow:hidden;max-width:380px;margin:0 auto;box-shadow:0 12px 28px #26241c26}
+.chat-status,.chat-header{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;background:#f7f8f4}
+.chat-status{font-size:11px;line-height:1.2}.chat-header{padding-block:10px;border-bottom:1px solid #daddd7}.chat-header span,.chat-name{font-size:11px;color:#526058}
+.chat-thread{list-style:none;margin:0;padding:7px 11px 10px}.chat-entry{margin-block:8px;animation:chat-enter .24s ease-out var(--chat-delay) both}
+.chat-entry time{display:block;color:#57635c;text-align:center;font-size:10px;line-height:1.3;margin-bottom:4px}
+.chat-message{display:flex;gap:8px;align-items:flex-start;line-height:1.42}.chat-avatar{display:grid;place-items:center;flex:0 0 29px;height:29px;border-radius:8px;color:#fff;background:#56766b;font-size:12px}
+.chat-message>div{max-width:80%}.chat-name{display:block}.chat-message p{background:#fff;border-radius:3px 10px 10px 10px;padding:6px 9px;font-size:13px}
+#sheet-body .chat-message p{margin:2px 0 0}.chat-mine .chat-message{flex-direction:row-reverse;text-align:right}.chat-mine .chat-avatar{background:#62677e}.chat-mine .chat-message p{background:#ace698;border-radius:10px 3px 10px 10px;text-align:left}
+.chat-footer{padding:5px;text-align:center;background:#f7f8f4;font-size:10px;color:#526058}
+#hotspots .chat-preview{display:flex;align-items:center;gap:9px;border-left:3px solid #ace698}.chat-preview-icon{background:#46734a;color:#fff;border-radius:7px;padding:3px 6px}.chat-preview small{display:block;color:#d3ded3;font-size:10px}
+@keyframes chat-enter{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.chat-entry{animation:none}}
+#scene-message{position:absolute;right:7vw;top:29%;width:min(350px,44vw);border:1px solid #859e8a;border-radius:15px;padding:11px 15px;background:#ecf1e8;color:#243128;box-shadow:0 10px 32px #0005;animation:chat-enter .23s ease-out;z-index:2}
+#scene-message div{font-size:12px;color:#456151}#scene-message p{font-size:14px;line-height:1.5;margin:5px 0 0}
+.chat-beat #line,.chat-beat #speaker{display:none}.chat-beat #hotspots{top:49%}
+#dialogue{padding:13px 22px 10px}#line{margin:7px 0 9px;line-height:1.58}#dialogue-foot{margin-top:4px}.dialogue-foot #back{margin-left:auto}
+@media(max-width:600px){#scene-message{top:25%;right:6vw;width:76vw}.chat-beat #hotspots{top:43%}#dialogue{padding:10px 14px}}
+.reduced #scene-message,.reduced .chat-entry{animation:none}
+#call-screen{position:absolute;right:7vw;top:28%;width:min(210px,46vw);padding:16px;border-radius:19px;border:1px solid #8a9e91;background:#192a24f2;color:#f1f5ec;text-align:center;box-shadow:0 12px 30px #0006;z-index:2}
+#call-screen strong{display:block;font-size:32px;font-variant-numeric:tabular-nums;line-height:1.2}
+#call-screen span{display:block;margin-top:7px;font-size:13px}#call-screen small{display:block;color:#bfe0ca;font-size:11px;margin-top:7px}
+.call-connected #call-screen small::before{content:"";display:inline-block;margin-right:6px;width:6px;height:6px;border-radius:50%;background:#90dfac}
+@media(max-width:600px){#call-screen{top:25%;right:5vw;padding:10px 13px}#call-screen strong{font-size:25px}}
+#scene-message.unread{animation:phone-wake .65s ease-out}
+@keyframes phone-wake{0%{opacity:0;filter:brightness(.55);transform:translateY(7px)}65%{filter:brightness(1.15)}100%{opacity:1;filter:none;transform:none}}
+.filing{background:#595043;border-radius:12px;padding:clamp(12px,3vw,25px)}
+#sheet-body .filing-envelope{display:grid;width:100%;gap:12px;padding:23px 16px;text-align:left;background:#cfad78;color:#33261a;border:1px solid #e1c694;border-radius:5px;box-shadow:0 4px 13px #0004}
+.filing-envelope strong{font-size:24px;letter-spacing:.14em}
+.filing-page{background:#fffcf0;color:#23201b;padding:24px clamp(16px,5vw,42px);border:1px solid #d5cbb3;box-shadow:3px 4px 0 #ddcfb8,6px 8px 16px #0005;font-family:SimSun,'Songti SC',serif;animation:unfold-page .26s ease-out both}
+.filing-page header{position:static;display:block;padding:0;border:0;text-align:center;font-size:17px;font-weight:bold}
+.filing-page h3{text-align:center;font-size:26px;margin:8px 0 17px}.filing-page p{line-height:1.75;font-size:15px}.filing-controls{display:flex;justify-content:flex-end;margin-top:9px}.filing-stack>.caption{color:#fff1de}
+@keyframes unfold-page{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+.reduced .filing-page,.reduced #scene-message.unread{animation:none}
+@media(prefers-reduced-motion:reduce){.filing-page,#scene-message.unread{animation:none}}

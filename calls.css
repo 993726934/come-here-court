@@ -1,0 +1,25 @@
+#call-screen{top:22%;right:5.5vw;width:clamp(175px,20vw,245px);padding:12px 14px 13px;border:1px solid #898f91;border-radius:22px;background:linear-gradient(160deg,#263838,#12191d 72%);box-shadow:0 0 0 4px #0d1318,0 13px 35px #0008;color:#f1f5ee;max-height:43svh;overflow:auto}
+.call-device-status{display:flex;justify-content:space-between;align-items:center;color:#c4d1cb;font:10px monospace;letter-spacing:.06em;margin-bottom:9px}
+.call-device-notch{width:34px;height:5px;border-radius:7px;background:#090e10;margin:auto}
+#call-screen strong{font-size:clamp(28px,3.6vw,48px);letter-spacing:.035em}
+#call-screen .call-recipient{font-size:12px;margin-top:3px}
+#call-screen .call-status{margin:4px 0 7px;font-variant-numeric:tabular-nums}
+.call-keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:8px auto 0;max-width:145px}
+#call-screen .call-keypad b{display:grid;place-items:center;background:#fff2;border-radius:12px;color:#f4faf4;font-size:13px;min-height:23px}
+.call-receiver{margin:7px 0 0;overflow:hidden;border:1px solid #abc1b64d;border-radius:8px;text-align:left;background:#203a35}
+.call-receiver-caption{padding:4px 7px;color:#f0f7ed;font-size:10px}
+.call-receiver-scene{position:relative;height:56px;overflow:hidden;background:linear-gradient(180deg,#617771,#334d45)}
+#call-screen[data-call="police"] .call-receiver-scene{background:linear-gradient(180deg,#657c91,#31475a)}
+#call-screen .receiver-monitor{position:absolute;right:13%;top:18%;width:35%;height:50%;background:repeating-linear-gradient(#abd8bd 0 1px,#314f4b 1px 6px);border:3px solid #253334;border-radius:2px;margin:0;transform:skewY(-4deg)}
+#call-screen .receiver-desk{position:absolute;bottom:0;left:0;right:0;height:18%;background:#465354;margin:0}
+#call-screen .receiver-operator{position:absolute;left:21%;bottom:8px;width:35px;height:25px;border-radius:50% 45% 4px 4px;background:#9bc4ae;margin:0;animation:operator-listen 4s ease-in-out infinite;transform-origin:bottom center}
+#call-screen[data-call="police"] .receiver-operator{background:#455b78}
+.receiver-operator::before{content:"";position:absolute;left:9px;top:-15px;width:18px;height:20px;border-radius:48%;background:#cc9d81;box-shadow:inset 3px 3px #302824}
+.receiver-operator::after{content:"";position:absolute;left:8px;top:-17px;width:20px;height:20px;border-top:2px solid #24312f;border-left:3px solid #24312f;border-radius:50%;transform:rotate(-18deg)}
+@keyframes operator-listen{0%,100%{transform:rotate(-2deg) translateY(0)}45%{transform:rotate(3deg) translateY(1px)}}
+.reduced .receiver-operator{animation:none!important}
+@media(prefers-reduced-motion:reduce){.receiver-operator{animation:none!important}}
+@media(max-width:700px){#call-screen{top:23%;right:5vw;width:165px;padding:7px 10px;max-height:32svh}.call-receiver-scene{height:43px}.call-keypad{gap:2px}}
+.unread#scene-message{border-left:5px solid #70935d;width:min(410px,80vw)}
+.unread#scene-message div{font-size:13px;font-weight:700}
+.unread#scene-message p{font-size:clamp(16px,2.5vw,20px);font-weight:700}
