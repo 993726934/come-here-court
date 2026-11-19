@@ -1,5 +1,5 @@
 import * as T from './vendor/three.module.js';
-import {updatePerformance} from './performance.js?v=1.5';
+import {updatePerformance} from './performance.js?v=1.6';
 
 const EXHIBITS={
  charge:['公诉机关起诉书','教学节选 · 案件事实有待审理'],

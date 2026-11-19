@@ -90,6 +90,14 @@ export function fightPose(stage,t,route='main'){
 export function updatePerformance(dt,t,current,reduced=false,replay){if(!replay){lineTime+=dt;fightElapsed+=dt;}const visible=actors.filter(r=>r.scene.visible);const speaking=visible.find(r=>r.role===detail.who);let energy=0;if(speech&&speech.who===detail.who){if(speech.analyser){speech.analyser.getByteTimeDomainData(speech.data);let sum=0;for(const x of speech.data)sum+=((x-128)/128)**2;energy=clamp(Math.sqrt(sum/speech.data.length)*5,0,1);}else if(lineTime<speech.duration)energy=(.35+.3*Math.sin(t*23))*(.7+.3*Math.sin(t*7));}
  for(const r of visible){r.phone.visible=false;r.root.visible=!(r.scene.name==='court'&&r.role==='陈哲'&&detail.chapter!=='witness');const a=t+r.phase;r.body.rotation.set(0,0,0);r.body.position.y=(r.sit?.67:.96)+Math.sin(a*1.5)*.003;r.head.rotation.set(Math.sin(a*.63)*.018,Math.sin(a*.33)*.035,Math.sin(a*.44)*.012);r.root.rotation.set(0,r.rot,0);r.root.position.y=r.baseY||0;r.root.position.x=r.home.x;r.root.position.z=r.home.z;
  for(let i=0;i<2;i++){const arm=r.arms[i];arm.shoulder.rotation.set(r.sit?-.34:Math.sin(a*.47+i)*.025,0,(i?1:-1)*.06);arm.elbow.rotation.set(r.sit?-1.05:-.08,0,0);r.legs[i].hip.rotation.x=r.sit?-Math.PI/2:0;r.legs[i].knee.rotation.x=r.sit?Math.PI/2:0;const blink=(a% (4.1+r.index*.07));r.eyes[i].eye.scale.y=blink<.14?Math.max(.06,Math.abs(blink-.07)/.07):1;r.eyes[i].pupil.position.x=Math.sin(a*.42)*.002;r.brows[i].rotation.z=0;}
+ if(detail.reaction&&r.scene.name==='campus'&&r.role==='你 · 林予安'){
+  const tension=Math.min(1,lineTime*2.2);
+  r.brows[0].rotation.z=-.41*tension;
+  r.brows[1].rotation.z=.41*tension;
+  r.eyes.forEach(({eye})=>eye.scale.y*=1-.26*tension);
+  r.head.rotation.x+=.12*tension;
+  r.arms[1].elbow.rotation.x-=.57*tension;
+ }
  r.mouth.scale.y=.003;if(r===speaking){r.mouth.scale.y=.003+energy*.018;r.jaw.position.y=-.055-energy*.007;r.head.rotation.x+=Math.sin(a*2.1)*.025*energy;r.body.rotation.y=Math.sin(a*.6)*.025;const gesture=pulse(1.2,2.3,4.3,lineTime)+pulse(7,8,10,lineTime);r.arms[1].shoulder.rotation.x-=gesture*.28;r.arms[1].elbow.rotation.x-=gesture*.42;r.arms[1].shoulder.rotation.z+=gesture*.12;r.brows[0].rotation.z=-energy*.035;r.brows[1].rotation.z=energy*.035;}else{r.jaw.position.y=-.055;if(speaking){const dx=speaking.root.position.x-r.root.position.x,dz=speaking.root.position.z-r.root.position.z;const turn=Math.atan2(dx,dz)-r.rot;r.head.rotation.y+=clamp(Math.atan2(Math.sin(turn),Math.cos(turn)),-.25,.25)*.5;}r.head.rotation.x+=pulse(2.5+r.index*.11,3+r.index*.11,3.8+r.index*.11,lineTime)*.045;}
  }
  if(current==='outside'&&(replay||detail.chapter==='conflict')){

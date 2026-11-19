@@ -1,0 +1,47 @@
+body:not(.playing)>header{position:sticky;top:0;background:#24211de8;backdrop-filter:blur(12px)}
+.playing #home-law{display:none}
+nav #home-law{background:#ead6ac;color:#28231b;border-color:#ead6ac;font-weight:700}
+nav #home-law:hover{background:#fff1d4}
+.cover-stamp .case-label{display:table;padding:.6em .85em;border:1px solid #dec08b;background:#24231ee8;color:#ffe4b0;font-size:clamp(13px,1.22vw,18px);font-weight:700;letter-spacing:.08em}
+#dialogue,body.conflict-scene #dialogue{width:min(610px,92vw);bottom:20px;padding:11px 17px 7px;border-radius:6px;max-height:48svh;overflow-y:auto}
+#dialogue .dialogue-top{gap:14px}
+#dialogue #line{margin:5px 0 8px;line-height:1.55;min-height:0;font-size:clamp(15px,1.27vw,18px);text-wrap:pretty;line-break:strict;overflow-wrap:anywhere}
+#dialogue .dialogue-foot{margin-top:6px;padding-top:2px}
+#actions{gap:6px}
+#actions button{min-height:39px;padding:7px 10px}
+#actions .next{min-width:92px}
+#restart{border-color:#d6b780;color:#ffe4b0}
+.chat-beat #dialogue,.chat-beat #hide-dialogue,.chat-beat #replay,.auto-beat #hide-dialogue,.auto-beat #replay,.auto-beat .dialogue-foot{display:none}
+#chat-controls{position:fixed;bottom:22px;right:5vw;z-index:3;display:flex;gap:8px}
+#chat-controls button{min-height:44px;background:#211c1cee}
+#chat-controls .primary{background:var(--cream)}
+#scene-message.tense{border-left:4px solid #a7473d}
+#scene-message.unread{width:min(470px,90vw)}
+#dialogue mark,#scene-message mark{padding:.02em .13em;border-radius:2px;font-weight:700;box-decoration-break:clone}
+#dialogue mark{background:#e7c387;color:#281a0e}
+#scene-message mark{background:#225548;color:#fff7df}
+#speaker .speaker-role{margin-left:8px;padding:2px 5px;border-radius:2px;background:#ecdcbf;color:#3c3023;letter-spacing:0;font-size:11px}
+.court-paper{margin:12px 0;padding:clamp(17px,4.5vw,40px);background:#fffdf3;color:#2c251e;border:1px solid #ccbea1;box-shadow:3px 4px 0 #e2d7bd;font:16px/1.8 "Songti SC","SimSun",serif;overflow-wrap:anywhere}
+.court-paper small{font-family:"Microsoft YaHei",sans-serif}
+.paper-heading{text-align:center;font-size:19px;font-weight:700;margin:12px 0 22px}
+.paper-heading h3{font-size:26px;letter-spacing:.12em;margin:4px 0}
+.paper-heading div{font-size:13px;font-weight:400}
+.judgment-paper p{text-indent:2em}
+.judgment-paper .judgment-order{background:#f0e3c4;border-left:3px solid #81552b;text-indent:0;padding:8px 12px;font-weight:700}
+.paper-signoff{text-align:right;margin-top:20px}
+.record-paging{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.record-paging span{font-size:13px;margin-inline:auto}
+.injury-basics{display:grid;gap:4px}
+#sheet-body .injury-basics p{margin:0}
+#signature-name{font:inherit;max-width:9em}
+@media(max-width:700px){
+ #dialogue,body.conflict-scene #dialogue{left:50%;transform:translateX(-50%);bottom:max(8px,env(safe-area-inset-bottom));padding:9px 12px 6px;border:1px solid #c0a67d55}
+ #dialogue #line{font-size:15px}
+ #actions{display:flex}
+ #actions button{width:auto;min-height:44px}
+ #actions .next{margin-left:auto}
+ .scene-tools,body.dialogue-hidden .scene-tools{top:85px;bottom:auto;max-width:61vw;justify-content:flex-end;flex-wrap:wrap;z-index:2}
+ .scene-heading{top:128px}
+ #chat-controls{bottom:max(12px,env(safe-area-inset-bottom))}
+ #scene-message.unread{width: min(420px,88vw)}
+}

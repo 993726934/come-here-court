@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import {createCourtExhibit} from './exhibit.js';
 let courtExhibit;
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
-import {human,actors,selectPerformance,setSpeech,updatePerformance} from './performance.js?v=1.5';
-import {createSurfaces,enrich,updateEnvironment} from './surfaces.js?v=1.5';
+import {human,actors,selectPerformance,setSpeech,updatePerformance} from './performance.js?v=1.6';
+import {createSurfaces,enrich,updateEnvironment} from './surfaces.js?v=1.6';
 const canvas=document.querySelector('#scene');
 const palettes={wood:0x704b36,dark:0x302925,cream:0xc4b69c,wall:0xa89980,red:0x633b32,metal:0x292b29};
 let renderer,scene,camera,current='court',offset=0,pitch=0,reduced=false,last=0,anim=0;
@@ -32,9 +32,9 @@ function court(){const g=base('court');room(g);box(g,0,.13,-5.5,12,.26,4.5);box(
  text(g,'明 川 区 人 民 法 院',0,3.5,-7.55,5.7,.65,'#a89980','#42382e');text(g,'虚构教学场景',0,2.85,-7.54,2,.28,'#a89980','#655744');
  for(const x of[-3,0,3]){const c=chair(g,x,-6.2);c.position.y=.62;const p=person(g,x,-6.2,{sit:true,color:0x181a1c,attire:'judge'});p.position.y=.62;nameplate(g,x===0?'审判长':'审判员',x,1.73,-4.72,1.36);}
  for(const x of[-3.3,3.3]){desk(g,x,-1.4,2.7);chair(g,x,-2.25);person(g,x,-2.25,{sit:true,color:x<0?0x29384d:0x1e1e20,attire:x<0?'prosecutor':'lawyer'});paper(g,x+.5,-1.4);mug(g,x-.6,-1.4);nameplate(g,x<0?'公诉人':'辩护人',x,.99,-.93);}
- desk(g,0,-3.6,1.7);chair(g,0,-4.3);person(g,0,-4.3,{sit:true,color:0x394048});laptop(g,0,-3.6);text(g,'书记员',0,.98,-3.12,.62,.17);
+ desk(g,0,-3.6,1.7);chair(g,0,-4.3);person(g,0,-4.3,{sit:true,color:0x394048});laptop(g,0,-3.6);nameplate(g,'书记员',0,.99,-3.12,1.15);
  desk(g,0,3.5,1.6);paper(g,0,3.5);nameplate(g,'被告人',0,.99,3.94,1.13);const facingBench=nameplate(g,'被告人',0,.99,3.06,1.13);facingBench.rotation.y=Math.PI;chair(g,0,4.2,Math.PI); // player position, no duplicated avatar
- desk(g,5,1.4,1.5);chair(g,5,.7);person(g,5,.7,{sit:true,color:0x6c6452});text(g,'被害人',5,.98,1.88,.65,.17);
+ desk(g,5,1.4,1.5);chair(g,5,.7);person(g,5,.7,{sit:true,color:0x6c6452});nameplate(g,'被害人',5,.99,1.88,1.18);
  for(const side of[-1,1]){
   box(g,side*4,.84,6.1,6,.1,.12);
   for(let x=1;x<=7;x+=.5)box(g,side*x,.42,6.1,.06,.84,.06);
@@ -117,7 +117,7 @@ function cinema(){
 }
 function setView(detail={}){courtExhibit?.setScene(detail);const id=groups[detail.world]?detail.world:'court';current=id;selectPerformance(detail);for(const [key,g]of Object.entries(groups))g.visible=key===id;offset=0;pitch=0;
  const views={court:[[0,2.5,9],[0,1.9,-3]],campus:[[4.2,2.9,5.8],[0,2.55,-5.5]],outside:[[3.4,2.1,5.8],[.5,.65,0]],lawyer:[[3,2.5,4],[0,1,-1]],corridor:[[1.65,2.28,3.8],[-.52,2.15,-5.5]],library:[[3.9,2.4,4.7],[-.25,1.49,-2.5]],radio:[[2.05,1.75,2.5],[0,1.47,-1.54]],cinema:[[4.3,2.7,6.4],[.55,1.6,-4.25]]};
- let [p,t]=views[id];if(detail.home){p=[9,4.8,13];t=[0,1.8,-3];}else if(id==='campus'&&detail.who==='同学'){p=[.6,1.72,-1.08];t=[-.58,1.3,-4.03];}else if(id==='campus'&&detail.who==='你 · 林予安'){p=[-1.15,1.74,-1.05];t=[.65,1.3,-3.85];}else if(id==='court'){if(detail.who==='赵检察官'){p=[-2.12,1.64,.05];t=[-3.3,1.36,-2.25];}if(detail.who==='许律师'){p=[2.14,1.64,.05];t=[3.3,1.36,-2.25];}if(detail.who==='沈审判长'){p=[1.1,2.43,-2.65];t=[0,2,-6.18];}if(detail.who==='陈哲'){p=[-.8,2,4.8];t=[-5,1.2,1];}if(detail.who==='你 · 林予安'){p=[3,2.1,3];t=[0,1.1,4.2];}if(detail.who==='周启明'){p=[3,1.85,3.3];t=[5,1.2,.7];}}
+ let [p,t]=views[id];if(detail.home){p=[9,4.8,13];t=[0,1.8,-3];}else if(id==='campus'&&detail.who==='同学'){p=[.6,1.72,-1.08];t=[-.58,1.3,-4.03];}else if(id==='campus'&&(detail.who==='你 · 林予安'||detail.reaction)){p=[-1.15,1.74,-1.05];t=[.65,1.3,-3.85];}else if(id==='court'){if(detail.who==='赵检察官'){p=[-2.12,1.64,.05];t=[-3.3,1.36,-2.25];}if(detail.who==='许律师'){p=[2.14,1.64,.05];t=[3.3,1.36,-2.25];}if(detail.who==='沈审判长'){p=[1.1,2.43,-2.65];t=[0,2,-6.18];}if(detail.who==='陈哲'){p=[-3.2,1.85,4.6];t=[-5,1.12,1.05];}if(detail.who==='书记员'&&detail.chapter==='record'){p=[2.8,2.32,.55];t=[0,1.27,-3.85];}if(detail.who==='你 · 林予安'){p=[3,2.1,3];t=[0,1.1,4.2];}if(detail.who==='周启明'){p=[3,1.85,3.3];t=[5,1.2,.7];}}
  if(id==='court'&&detail.exhibitReady&&['旁白','沈审判长'].includes(detail.who)){p=[2.3,2.7,7.9];t=[1.05,2.15,-4.8];}
  if(id==='outside'&&detail.argument){
   p=[detail.who==='周启明'?-.95:1.05,1.6,2.85];
@@ -125,7 +125,7 @@ function setView(detail={}){courtExhibit?.setScene(detail);const id=groups[detai
  }
  pos.set(...p);target.set(...t);if(reduced||detail.immediate){camera.position.copy(pos);look.copy(target);camera.lookAt(look);}document.querySelector('#world').dataset.fallback=detail.place||'刑事审判庭';}
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.96;scene=new THREE.Scene();scene.background=new THREE.Color(0x9ba9ae);scene.fog=new THREE.Fog(0x827566,20,50);camera=new THREE.PerspectiveCamera(47,innerWidth/innerHeight,.1,70);scene.add(new THREE.HemisphereLight(0xe7eff4,0x585247,1.65));const sun=new THREE.DirectionalLight(0xffe6c5,2.6);sun.position.set(-7,10,5);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-15;sun.shadow.camera.right=15;sun.shadow.camera.top=15;sun.shadow.camera.bottom=-15;sun.shadow.normalBias=.04;scene.add(sun);scene.add(new THREE.AmbientLight(0xd5dde1,.4));court();campus();outside();lawyer();corridor();library();radio();cinema();
-desk(groups.court,-5,1.4,1.35);chair(groups.court,-5,.7);person(groups.court,-5,.7,{sit:true,color:0x555f51});text(groups.court,'证人',-5,.98,1.88,.65,.17);
+desk(groups.court,-5,1.4,1.35);chair(groups.court,-5,.7);person(groups.court,-5,.7,{sit:true,color:0x555f51});nameplate(groups.court,'证人',-5,.99,1.88,1.12);
 person(groups.court,0,4.2,{sit:true,rot:Math.PI,color:0x6d6355});
 person(groups.court,6.75,5.45,{rot:-.52,color:0x27374b,attire:'officer'});
 const roleMap={court:['审判员','沈审判长','审判员','赵检察官','许律师','书记员','周启明','旁听人员','母亲','陈哲','你 · 林予安','值庭法警'],campus:['同学','你 · 林予安'],outside:['你 · 林予安','周启明','陈哲'],lawyer:['许律师'],corridor:['周启明','母亲','工作人员'],library:['同学'],radio:['广播站搭档'],cinema:['电影社同学']};

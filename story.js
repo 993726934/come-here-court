@@ -1,8 +1,8 @@
-export const VERSION='1.5.0';
+export const VERSION='1.6.0';
 export const ROUTES={main:'追上去的一拳',defense:'没有停下的攻击',doubt:'看不清的关键片段'};
 export const LIFE={project:'帮同学去图书馆还书',family:'到校园广播站试录节目',field:'帮电影社布置露天放映'};
 export const LIFE_SENDERS={project:'借书的同学',family:'广播站搭档',field:'电影社同学'};
-export const LIFE_MESSAGES={project:'去图书馆还书，你还来吗？',family:'广播站试录，你还来吗？',field:'电影社露天放映，你还来吗？'};
+export const LIFE_MESSAGES={project:'上午约好一起去图书馆还书，这都18:45了，你还来不来？',family:'上午说好来广播站试录，这都18:45了，你还来不来？',field:'上午说好的电影社露天放映，这都18:45了，你还来不来？'};
 export const INCIDENTS=[['18:42:10','双方在教学楼外争执。'],['18:42:18','周启明先推打林予安。'],['18:42:25','陈哲上前劝阻，将双方分开。'],['18:42:34','周启明转身向自行车棚走去。'],['18:42:39','林予安追上击打周启明。']];
 const L=(who,text,extra={})=>({who,text,...extra});
 const C=(id,title,place,time,world,lines,docs=[])=>({id,title,place,time,world,lines,docs});
@@ -13,15 +13,17 @@ export function buildFullStory(route='main',life='project',appeal=false){
  L('旁白','投影仪轻轻响着。明天就是比赛答辩日。今晚要合稿，林予安负责准备答辩文稿。'),
  L('同学','明早九点就答辩了。予安，答辩文稿今晚能定下来吗？'),
  L('你 · 林予安','能，我今晚把答辩文稿合好。'),
- L('内心独白','那时候，我以为今天只是普通的一天。今晚还有一件约好的事。',{choices:Object.entries(LIFE).map(([id,label])=>[label,'life',id])}),
+ L('内心独白','那时候，我以为今天只是普通的一天。上午，我还跟同学约了今晚见。',{choices:Object.entries(LIFE).map(([id,label])=>[label,'life',id])}),
  L('旁白','手机亮了。项目群里，周启明发来一条消息。',{doc:'chat'}),
  L('周启明','谁改了最后一版文件？出了问题就装没看见，你一直都是这样。',{chat:'周启明'}),
  L('你 · 林予安','我只改了展示页面，原文件还在。为什么直接说是我的问题？',{chat:'林予安'}),
- L('旁白','你们约好当面核对文件。接下来，是你已经经历过的那段记忆。',{leaving:true})],['chat']),
+ L('旁白','周启明发来消息，说他在东教学楼门口等你。你带上手机，准备当面核对版本记录。',{leaving:true})],['chat']),
  C('conflict','02 / 被拉开的那一刻','教学楼外','案发当天 18:42 · 事件回忆','outside',[
- L('你 · 林予安','记录都在。你为什么在群里那样说？',{argument:true}),
- L('周启明','那你刚才为什么不接电话？',{argument:true}),
- L('你 · 林予安','我在上课。',{argument:true}),
+ L('你 · 林予安','我把版本记录打开了。你说打不开的是哪一份？',{argument:true}),
+ L('周启明','群里置顶的那份。答辩组催我交稿，我给你打了两次电话。',{argument:true}),
+ L('你 · 林予安','刚才在教室合稿，手机静音了。你看，原稿还在，群里挂的是展示版。',{argument:true}),
+ L('周启明','我已经拿那份去交了。明早就答辩，老师问起来怎么办？',{argument:true}),
+ L('你 · 林予安','先换回原稿。还有，群里那句怪我的话，你能不能说清楚？',{argument:true}),
  L('旁白','周启明推了你，又打了你一下。声音突然变得很远。'),
  L('陈哲','停！都停一下！'),
  L('旁白',main?'陈哲站在你们中间。周启明放下手，转身走向车棚。':def?'陈哲上前劝阻。周启明绕过他，继续向你追打。':'陈哲上前劝阻。人影挤在一起，你记不清接下来每个动作的先后。'),
@@ -88,6 +90,7 @@ export function buildFullStory(route='main',life='project',appeal=false){
  L('许律师',main?'请完整播放前段，查清周启明是否先动手，也查清林予安随后出手时，危险是否仍在持续。':def?'请结合持续攻击、后退与立即停手的完整经过审查防卫性质。':'关键过程缺失。请结合其他证据审查，不能由画面空白推定有罪。'),
  L('沈审判长','各方意见已记录，法庭将结合全案证据审查。')],['video']),
  C('injury','09 / 一份鉴定的边界','刑事审判庭','法庭调查 · 第二组证据','court',[
+ L('沈审判长','对现场影像的意见已记录。接下来核对周启明的伤情，请公诉人出示病历和鉴定意见。'),
  L('赵检察官','出示病历、伤情鉴定意见等材料。鉴定意见认定损伤程度为轻伤二级。'),
  L('你 · 林予安','伤情程度，是看打了几下吗？'),
  L('许律师','不是。先核对鉴定检查了什么、依据是什么。损伤程度也不能单独代替对行为性质的判断。',{doc:'injury'}),
@@ -95,11 +98,11 @@ export function buildFullStory(route='main',life='project',appeal=false){
  L('许律师',main?'对本案鉴定意见本身无异议。请继续结合现场经过审查。':def?'对伤情结论无异议，但损伤结果不能单独否定正当防卫。':'伤情存在，不等于致伤行为和因果关系已经得到充分证明。')],['injury']),
  C('witness','10 / 朋友说出的事实','刑事审判庭','法庭调查 · 证人出庭','court',[
  L('旁白','陈哲进入法庭。审判长核实身份、关系，告知如实作证义务和相应法律责任。'),
- L('赵检察官','你看到林予安击打周启明了吗？'),
+ L('赵检察官','证人陈哲，请说说你看到的情况。你看到林予安击打周启明了吗？'),
  L('陈哲',main?'看到了。周启明往车棚走，他从我旁边追过去。':def?'看到了反击。当时周启明还在追着打，林予安在后退。':'我看到两人有接触，但关键动作被挡住了。我不能确认每一下是谁做的。'),
  L('许律师','最开始谁先动手？你听清了每句话吗？'),
  L('陈哲','周启明先推，又打了一下。说话有些听清了，有些没听清。'),
- L('沈审判长','被告人，经许可可以围绕事实发问。',{choices:[['你当时站在什么位置？','witness','position'],['我们是室友，你怎么能这么说？','witness','friend']]}),
+ L('沈审判长','被告人林予安，本庭准许你就当时的经过向证人陈哲发问。',{choices:[['你当时站在什么位置？','witness','position'],['我们是室友，你怎么能这么说？','witness','friend']]}),
  L('陈哲','我没想帮谁说赢。我只能说我看见的。'),
  L('内心独白','我看着他，第一次没有急着接话。')],['witness']),
  C('mitigation','11 / 伤害之后','刑事审判庭','法庭调查 · 到案与其他材料','court',[
@@ -122,11 +125,11 @@ export function buildFullStory(route='main',life='project',appeal=false){
  L('你 · 林予安',main?'我一直说，是他先动手。这是真的。但后来，我把它当成了追上去打他的理由。':def?'我知道他受伤了，也愿意讲清过程。但当时他还在打我，我是为了让他停下来。':'我愿意配合法庭查明事实。但不能确认的事，我不能说成确定发生过。'),
  L('你 · 林予安',main?'我道歉，不是要他现在就原谅我。我希望有机会继续学习，也会承担法院依法确定的责任。':'请法庭依法审查我的辩解和全部证据。'),
  L('沈审判长','现在休庭。合议庭评议后，另行宣判。')]),
- C('record','14 / 请核对庭审笔录','庭后核对区','庭审结束后','lawyer',[
- L('书记员','请仔细核对庭审笔录。如有遗漏或者差错，可以提出。'),
+ C('record','14 / 请核对庭审笔录','刑事审判庭','本次庭审结束后 · 当日核对','court',[
+ L('书记员','林予安，请在这里核对今天的庭审笔录。你的陈述如有遗漏或者差错，可以申请补正，核对后再签名。'),
  L('旁白','你发现，记录写着“对全部证据均无异议”，但你曾提出结合完整经过或证明范围审查的意见。',{doc:'record'}),
  L('你 · 林予安','请让我核对这一处。'),
- L('书记员','可以。我们核对相应庭审记录。',{choices:[['核对、更正并确认笔录','record','open']]}),
+ L('书记员','可以。我们核对相应庭审记录。',{choices:[['打开庭审笔录','record','open']]}),
  L('旁白','本章的签写只是一项教学互动，笔迹不上传，也不作为真实法律文书签名使用。')],['record']),
  C('verdict','15 / 判决','刑事审判庭','另行通知的宣判日 · 公开宣判','court',[
  L('旁白','你再次走进同一间法庭。法庭依法公开宣判。'),
@@ -154,6 +157,6 @@ export function buildFullStory(route='main',life='project',appeal=false){
 }
 // Short edition: preserve the evidentiary and procedural spine; full text remains in source.
 export function buildStory(route='main',life='project',appeal=false){
- const keep={promise:[0,1,2,3,5,6,7],conflict:[0,1,2,3,4,5,7,8,9,10,11,12],summons:[0,3,6],lawyer:[4,6,7],opening:[0,2,7,8,9],charge:[0,1,3,4],video:[0,1,2,3,4],injury:[0,2,3],witness:[1,2,5,6],mitigation:[0,1,2],debate:[0,1,3,5],statement:[0,1,2,4],record:[0,3],verdict:route==='main'?[1,2,4,5,6,7,8]:[1,2,3,4,5,6],after:appeal?[0,1]:[0,2,3,5,7],finish:[0]};
+ const keep={promise:[0,1,2,3,5,6,7],conflict:[0,1,2,3,4,5,6,7,9,10,11,12,13,14],summons:[0,3,6],lawyer:[4,6,7],opening:[0,2,7,8,9],charge:[0,1,3,4],video:[0,1,2,3,4],injury:[0,1,3,4],witness:[0,1,2,5,6],mitigation:[0,1,2],debate:[0,1,3,5],statement:[0,1,2,4],record:[0,3],verdict:route==='main'?[1,2,4,5,6,7,8]:[1,2,3,4,5,6],after:appeal?[0,1]:[0,2,3,5,7],finish:[0]};
  return buildFullStory(route,life,appeal).filter(c=>keep[c.id]).map((c,i)=>({...c,title:c.id==='finish'?c.title:`${String(i+1).padStart(2,'0')} / ${c.title.split(' / ')[1]}`,lines:c.lines.filter((_,n)=>keep[c.id].includes(n))}));
 }
