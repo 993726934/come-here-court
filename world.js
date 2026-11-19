@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import {createCourtExhibit} from './exhibit.js';
 let courtExhibit;
 import {RoundedBoxGeometry} from './vendor/RoundedBoxGeometry.js';
-import {human,actors,selectPerformance,setSpeech,updatePerformance} from './performance.js?v=1.6';
-import {createSurfaces,enrich,updateEnvironment} from './surfaces.js?v=1.6';
+import {human,actors,selectPerformance,setSpeech,updatePerformance} from './performance.js?v=1.7';
+import {createSurfaces,enrich,updateEnvironment} from './surfaces.js?v=1.7';
 const canvas=document.querySelector('#scene');
 const palettes={wood:0x704b36,dark:0x302925,cream:0xc4b69c,wall:0xa89980,red:0x633b32,metal:0x292b29};
 let renderer,scene,camera,current='court',offset=0,pitch=0,reduced=false,last=0,anim=0;
@@ -121,7 +121,7 @@ function setView(detail={}){courtExhibit?.setScene(detail);const id=groups[detai
  if(id==='court'&&detail.exhibitReady&&['旁白','沈审判长'].includes(detail.who)){p=[2.3,2.7,7.9];t=[1.05,2.15,-4.8];}
  if(id==='outside'&&detail.argument){
   p=[detail.who==='周启明'?-.95:1.05,1.6,2.85];
-  t=[0,1.37,0];
+  t=[0,1.37,detail.route==='main'?-2.65:0];
  }
  pos.set(...p);target.set(...t);if(reduced||detail.immediate){camera.position.copy(pos);look.copy(target);camera.lookAt(look);}document.querySelector('#world').dataset.fallback=detail.place||'刑事审判庭';}
 try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'low-power'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.96;scene=new THREE.Scene();scene.background=new THREE.Color(0x9ba9ae);scene.fog=new THREE.Fog(0x827566,20,50);camera=new THREE.PerspectiveCamera(47,innerWidth/innerHeight,.1,70);scene.add(new THREE.HemisphereLight(0xe7eff4,0x585247,1.65));const sun=new THREE.DirectionalLight(0xffe6c5,2.6);sun.position.set(-7,10,5);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-15;sun.shadow.camera.right=15;sun.shadow.camera.top=15;sun.shadow.camera.bottom=-15;sun.shadow.normalBias=.04;scene.add(sun);scene.add(new THREE.AmbientLight(0xd5dde1,.4));court();campus();outside();lawyer();corridor();library();radio();cinema();

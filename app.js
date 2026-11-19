@@ -1,11 +1,11 @@
-import {VERSION,ROUTES,LIFE,LIFE_SENDERS,LIFE_MESSAGES,buildStory} from './story.js?v=1.6';
-import {TITLES,material,videoFacts,LEGAL} from './materials.js?v=1.6';
-import {unlock,configureAudio,speak,stopVoice,preload,effect,suspend} from './audio.js?v=1.6';
+import {VERSION,ROUTES,LIFE,LIFE_SENDERS,LIFE_MESSAGES,buildStory} from './story.js?v=1.7';
+import {TITLES,material,videoFacts,LEGAL} from './materials.js?v=1.7';
+import {unlock,configureAudio,speak,stopVoice,preload,effect,suspend} from './audio.js?v=1.7';
 const $=s=>document.querySelector(s),QA=location.hostname==='127.0.0.1'&&new URLSearchParams(location.search).has('qa'),KEY='come-here-court-v1'+(QA?'-qa':''),PREF='come-here-court-prefs'+(QA?'-qa':'');
 let state=fresh(),prefs={voice:true,effects:true,reduced:matchMedia('(prefers-reduced-motion: reduce)').matches},story,active=false,token=0,toastTimer,videoFrame,returnFocus;
-function fresh(route='main'){return {schema:6,route,life:'project',chapter:0,line:0,docs:[],log:[],corrected:false,recordConfirmed:false,appeal:false,completed:false,titleShown:false};}
+function fresh(route='main'){return {schema:7,route,life:'project',chapter:0,line:0,docs:[],log:[],corrected:false,recordConfirmed:false,appeal:false,completed:false,titleShown:false};}
 try{const p=JSON.parse(localStorage.getItem(PREF));if(p&&typeof p==='object')for(const k of['voice','effects','reduced'])if(typeof p[k]==='boolean')prefs[k]=p[k];}catch{}
-let saved;try{const s=JSON.parse(localStorage.getItem(KEY));if(s?.schema===2&&s.chapter===0&&s.line>0)s.line+=2;if(s?.schema===2)s.schema=3;if(s?.schema===3&&s.chapter===1&&s.line>=6)s.line++;if(s?.schema===3)s.schema=4;if(s?.schema===4&&s.chapter===1)s.line+=3;if(s?.schema===4)s.schema=5;if(s?.schema===5){if(s.chapter===1&&s.line>=3)s.line+=2;if(s.chapter===7||s.chapter===8)s.line++;s.schema=6;}if(s?.schema===6&&Object.hasOwn(ROUTES,s.route)&&Object.hasOwn(LIFE,s.life)&&Number.isInteger(s.chapter)&&Number.isInteger(s.line)&&Array.isArray(s.docs)&&Array.isArray(s.log)){const a=buildStory(s.route,s.life,s.appeal);if(a[s.chapter]?.lines[s.line])saved={...fresh(),...s,docs:s.docs.filter(x=>Object.hasOwn(TITLES,x))};}}catch{}
+let saved;try{const s=JSON.parse(localStorage.getItem(KEY));if(s?.schema===2&&s.chapter===0&&s.line>0)s.line+=2;if(s?.schema===2)s.schema=3;if(s?.schema===3&&s.chapter===1&&s.line>=6)s.line++;if(s?.schema===3)s.schema=4;if(s?.schema===4&&s.chapter===1)s.line+=3;if(s?.schema===4)s.schema=5;if(s?.schema===5){if(s.chapter===1&&s.line>=3)s.line+=2;if(s.chapter===7||s.chapter===8)s.line++;s.schema=6;}if(s?.schema===6){if(s.route==='main'&&s.chapter<=1)s.line=0;s.schema=7;}if(s?.schema===7&&Object.hasOwn(ROUTES,s.route)&&Object.hasOwn(LIFE,s.life)&&Number.isInteger(s.chapter)&&Number.isInteger(s.line)&&Array.isArray(s.docs)&&Array.isArray(s.log)){const a=buildStory(s.route,s.life,s.appeal);if(a[s.chapter]?.lines[s.line])saved={...fresh(),...s,docs:s.docs.filter(x=>Object.hasOwn(TITLES,x))};}}catch{}
 $('#resume').hidden=!saved;
 function applyPrefs(){configureAudio(prefs.voice,prefs.effects);document.body.classList.toggle('reduced',prefs.reduced);dispatchEvent(new CustomEvent('court-reduced',{detail:prefs.reduced}));try{localStorage.setItem(PREF,JSON.stringify(prefs));}catch{}}
 applyPrefs();addEventListener('court-world-ready',()=>{applyPrefs();if(active)view();});
@@ -43,7 +43,7 @@ function dial(call){
  callStartedAt=Date.now();
  render();
 }
-function view(){const c=story[state.chapter],l=c.lines[state.line];document.body.classList.toggle('conflict-scene',c.id==='conflict');dispatchEvent(new CustomEvent('court-scene',{detail:{world:c.world,who:l.who,place:c.place,text:l.text,chapter:c.id,route:state.route,argument:l.argument,reaction:l.chat==='周启明',exhibitReady:c.id==='video'&&state.line>=1,call:l.call,callConnected:!!l.call&&state.connectedCall===l.call}}));}
+function view(){const c=story[state.chapter],l=c.lines[state.line];document.body.classList.toggle('conflict-scene',c.id==='conflict');dispatchEvent(new CustomEvent('court-scene',{detail:{world:c.world,who:l.who,place:c.place,text:l.text,chapter:c.id,route:state.route,argument:l.argument,combat:l.combat,pointing:l.pointing,reaction:l.chat==='周启明',exhibitReady:c.id==='video'&&state.line>=1,call:l.call,callConnected:!!l.call&&state.connectedCall===l.call}}));}
 function start(route='main',resume=false){closeSheet();autoPaused=false;unlock();state=resume&&saved?structuredClone(saved):fresh(route);rebuild();active=true;$('#home').hidden=true;$('#game').hidden=false;document.body.classList.add('playing');render();}
 function actionButton(label,fn,primary=false){const b=document.createElement('button');b.textContent=label;if(primary)b.className='primary';b.onclick=fn;return b;}
 const HEARING_PHASES={
@@ -81,7 +81,7 @@ function renderHearing(chapter,line){
 }
 let sceneTimer;
 let autoPaused=false;
-const plotTerms=/(明早九点|明天就是比赛答辩日|今晚要合稿|答辩文稿|18:45|轻伤二级|有期徒刑八个月|缓刑一年|林予安无罪|上诉期限为十日)/g;
+const plotTerms=/(明早九点|明天就是比赛答辩日|今晚要合稿|答辩文稿|18:35|20:30|21:00|21:05|轻伤二级|有期徒刑八个月|缓刑一年|林予安无罪|上诉期限为十日)/g;
 function showPlotText(node,text){
  node.replaceChildren(...text.split(plotTerms).map((part,i)=>{
   if(i%2===0)return document.createTextNode(part);
@@ -90,7 +90,7 @@ function showPlotText(node,text){
   return mark;
  }));
 }
-function render(){clearTimeout(sceneTimer);stopVoice();const generation=++token;rebuild();const c=story[state.chapter],l=c.lines[state.line];for(const d of c.docs)if(!state.docs.includes(d))state.docs.push(d);if(c.id==='finish'){state.completed=true;try{localStorage.setItem('court-unlocked','yes')}catch{}}save();$('#chapter').textContent=c.title;$('#location').textContent=c.place;$('#moment').textContent=c.time;$('#speaker').textContent=l.who;
+function render(){clearTimeout(sceneTimer);stopVoice();const generation=++token;rebuild();const c=story[state.chapter],l=c.lines[state.line];for(const d of c.docs)if(!state.docs.includes(d))state.docs.push(d);if(c.id==='finish'){state.completed=true;try{localStorage.setItem('court-unlocked','yes')}catch{}}save();$('#chapter').textContent=c.title;$('#location').textContent=c.place;$('#moment').textContent=state.route==='main'&&l.unread?'案发当天 21:05 · 救护车离开后，留在现场等候处理':c.time;$('#speaker').textContent=l.who;
  if(c.world==='court'){
   const role={陈哲:'证人',周启明:'被害人',书记员:'书记员','你 · 林予安':'被告人'}[l.who];
   if(role&&role!==l.who){
@@ -125,8 +125,9 @@ function render(){clearTimeout(sceneTimer);stopVoice();const generation=++token;
   }
  }
  const chatBeat=!!l.chat;
+ if(l.voiceMessage)effect('message');
  document.body.classList.toggle('chat-beat',chatBeat);
- $('#chat-controls').hidden=!chatBeat;
+ $('#chat-controls').hidden=!chatBeat;$('#chat-next').textContent=l.leaving?'下楼，当面说 →':'继续 →';
  const auto=c.id==='conflict'&&!l.call&&!l.unread;
  if(!auto)autoPaused=false;
  document.body.classList.toggle('auto-beat',auto);
@@ -143,7 +144,7 @@ function render(){clearTimeout(sceneTimer);stopVoice();const generation=++token;
  message.classList.toggle('unread',!!notification);
  if(chatBeat||notification){
   const sender=LIFE_SENDERS[state.life];
-  message.querySelector('div').textContent=notification?sender+' · 新消息':'项目组 · '+l.chat;
+  message.querySelector('div').textContent=notification?sender+' · 新消息':'微信 · 项目组 · '+l.chat;
   message.classList.toggle('tense',l.chat==='周启明');
   showPlotText(message.querySelector('p'),notification?(state.readLastMessage?LIFE_MESSAGES[state.life]:'1 条未读消息'):l.text);
  }
@@ -172,11 +173,11 @@ function render(){clearTimeout(sceneTimer);stopVoice();const generation=++token;
    control.classList.add('auto-control');
    if(!autoPaused&&!document.hidden&&!$('#sheet').open){
     const reading=Math.max(2000,l.text.length*185);
-    const motion=/周启明推了|甩开|后退中反击|混乱中/.test(l.text)?3900:0;
+    const motion=l.combat==='kick'?4300:/周启明推了|甩开|后退中反击|混乱中/.test(l.text)?3900:0;
     sceneTimer=setTimeout(()=>{if(generation===token&&!document.hidden&&!$('#sheet').open)next();},Math.max(motion,duration?duration+220:reading));
    }
    return;
-  }$('#line').classList.toggle('narrator',/旁白|内心/.test(l.who));const note=$('#line-note');note.hidden=!l.readingExcerpt;note.textContent=l.readingExcerpt?'教学节选 · 为控制体验时长，此处仅播放起诉书的指控摘要。可在案卷查阅教学副本。':'';const a=$('#actions');if(l.doc)a.append(actionButton('查看'+TITLES[l.doc],()=>openMaterial(l.doc)));if(l.choices){for(const [label,kind,value] of l.choices)a.append(actionButton(label,()=>choose(kind,value),l.choices.length===1));}else{const b=actionButton(connected?'结束通话 →':l.title?'那一拳之后 →':l.leaving?'下楼核对文件 →':l.leavingOffice?'结束会谈，继续 →':'继续 →',next,true);b.classList.add('next');if(c.id==='conflict'&&/周启明推了|甩开|后退中反击/.test(l.text)){b.disabled=true;b.textContent='场景演绎中…';setTimeout(()=>{if(generation===token){b.disabled=false;b.textContent='继续 →';}},3600);}a.append(b);}}, {silent:chatBeat||notification||(auto&&autoPaused)});
+  }$('#line').classList.toggle('narrator',/旁白|内心/.test(l.who));const note=$('#line-note');note.hidden=!l.readingExcerpt;note.textContent=l.readingExcerpt?'教学节选 · 为控制体验时长，此处仅播放起诉书的指控摘要。可在案卷查阅教学副本。':'';const a=$('#actions');if(l.doc)a.append(actionButton('查看'+TITLES[l.doc],()=>openMaterial(l.doc)));if(l.choices){for(const [label,kind,value] of l.choices)a.append(actionButton(label,()=>choose(kind,value),l.choices.length===1));}else{const b=actionButton(connected?'结束通话 →':l.title?'那一脚之后 →':l.leaving?'下楼核对文件 →':l.leavingOffice?'结束会谈，继续 →':'继续 →',next,true);b.classList.add('next');if(c.id==='conflict'&&/周启明推了|甩开|后退中反击/.test(l.text)){b.disabled=true;b.textContent='场景演绎中…';setTimeout(()=>{if(generation===token){b.disabled=false;b.textContent='继续 →';}},3600);}a.append(b);}}, {silent:(chatBeat&&!l.voiceMessage)||notification||(auto&&autoPaused)});
 }
 function next(){unlock();const c=story[state.chapter],l=c.lines[state.line];if(l.unread&&!state.readLastMessage)return;if(l.title&&!state.titleShown){stopVoice();state.titleShown=true;save();$('#chapter-card').hidden=false;effect('title');$('#close-title').focus();return;}if(l.call&&state.connectedCall!==l.call)return;delete state.connectedCall;if(state.line<c.lines.length-1)state.line++;else if(state.chapter<story.length-1){state.chapter++;state.line=0;}render();}
 function remember(kind,value){state.log.push({chapter:story[state.chapter].id,kind,value});if(state.log.length>150)state.log.shift();}

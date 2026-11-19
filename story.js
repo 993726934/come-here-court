@@ -1,9 +1,10 @@
-export const VERSION='1.6.0';
-export const ROUTES={main:'追上去的一拳',defense:'没有停下的攻击',doubt:'看不清的关键片段'};
+import {reviseMain} from './main-story.js?v=1.7';
+export const VERSION='1.7.0';
+export const ROUTES={main:'失控的一脚',defense:'没有停下的攻击',doubt:'看不清的关键片段'};
 export const LIFE={project:'帮同学去图书馆还书',family:'到校园广播站试录节目',field:'帮电影社布置露天放映'};
 export const LIFE_SENDERS={project:'借书的同学',family:'广播站搭档',field:'电影社同学'};
-export const LIFE_MESSAGES={project:'上午约好一起去图书馆还书，这都18:45了，你还来不来？',family:'上午说好来广播站试录，这都18:45了，你还来不来？',field:'上午说好的电影社露天放映，这都18:45了，你还来不来？'};
-export const INCIDENTS=[['18:42:10','双方在教学楼外争执。'],['18:42:18','周启明先推打林予安。'],['18:42:25','陈哲上前劝阻，将双方分开。'],['18:42:34','周启明转身向自行车棚走去。'],['18:42:39','林予安追上击打周启明。']];
+export const LIFE_MESSAGES={project:'上午约好一起去图书馆还书，这都21:05了，你还来不来？',family:'上午说好来广播站试录，这都21:05了，你还来不来？',field:'上午说好的电影社露天放映，这都21:05了，你还来不来？'};
+export const INCIDENTS=[['18:42:10','双方在教学楼外争执。'],['18:42:18','林予安催促修改文稿，双方争吵。'],['18:42:25','周启明用手指向林予安鼻尖。'],['18:42:34','林予安踢踹周启明，周启明失衡。'],['18:42:39','周启明面部碰撞台阶，陈哲上前制止。']];
 const L=(who,text,extra={})=>({who,text,...extra});
 const C=(id,title,place,time,world,lines,docs=[])=>({id,title,place,time,world,lines,docs});
 export function buildFullStory(route='main',life='project',appeal=false){
@@ -158,5 +159,7 @@ export function buildFullStory(route='main',life='project',appeal=false){
 // Short edition: preserve the evidentiary and procedural spine; full text remains in source.
 export function buildStory(route='main',life='project',appeal=false){
  const keep={promise:[0,1,2,3,5,6,7],conflict:[0,1,2,3,4,5,6,7,9,10,11,12,13,14],summons:[0,3,6],lawyer:[4,6,7],opening:[0,2,7,8,9],charge:[0,1,3,4],video:[0,1,2,3,4],injury:[0,1,3,4],witness:[0,1,2,5,6],mitigation:[0,1,2],debate:[0,1,3,5],statement:[0,1,2,4],record:[0,3],verdict:route==='main'?[1,2,4,5,6,7,8]:[1,2,3,4,5,6],after:appeal?[0,1]:[0,2,3,5,7],finish:[0]};
- return buildFullStory(route,life,appeal).filter(c=>keep[c.id]).map((c,i)=>({...c,title:c.id==='finish'?c.title:`${String(i+1).padStart(2,'0')} / ${c.title.split(' / ')[1]}`,lines:c.lines.filter((_,n)=>keep[c.id].includes(n))}));
+ const chapters=buildFullStory(route,life,appeal);
+ if(route==='main')reviseMain(chapters,life);
+ return chapters.filter(c=>keep[c.id]).map((c,i)=>({...c,title:c.id==='finish'?c.title:`${String(i+1).padStart(2,'0')} / ${c.title.split(' / ')[1]}`,lines:route==='main'&&['promise','conflict'].includes(c.id)?c.lines:c.lines.filter((_,n)=>keep[c.id].includes(n))}));
 }

@@ -45,3 +45,9 @@ nav #home-law:hover{background:#fff1d4}
  #chat-controls{bottom:max(12px,env(safe-area-inset-bottom))}
  #scene-message.unread{width: min(420px,88vw)}
 }
+.chat-beat #scene-message{background:#ededed;border:8px solid #242a29;border-top-width:28px;border-bottom-width:20px;border-radius:23px;width:min(360px,88vw);min-height:210px;padding:20px 15px;box-shadow:0 16px 50px #0005}
+.chat-beat #scene-message:before{content:"项目组";display:block;color:#252d29;text-align:center;font-size:15px;font-weight:700;padding:0 0 14px;margin-bottom:16px;border-bottom:1px solid #c8ceca}
+.chat-beat #scene-message p{background:#fff;padding:12px;border-radius:4px;color:#21382c;line-height:1.7}
+.chat-beat #scene-message.tense p{background:#a9e782}
+.chat-beat #scene-message.tense:after{content:"◖ 语音消息 · 自动播放";display:block;color:#2f5c41;font-size:12px;margin-top:14px;animation:voicePulse 1s ease-in-out infinite alternate}
+@keyframes voicePulse{to{opacity:.55}}
