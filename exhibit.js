@@ -1,5 +1,5 @@
 import * as T from './vendor/three.module.js';
-import {updatePerformance} from './performance.js?v=1.7';
+import {updatePerformance} from './performance.js?v=1.8';
 
 const EXHIBITS={
  charge:['公诉机关起诉书','教学节选 · 案件事实有待审理'],
@@ -10,7 +10,7 @@ const EXHIBITS={
 };
 
 function replayPose(progress,route){
- if(route==='main')return progress<2.3?{stage:'argument',time:progress,route}:{stage:'kick',time:(progress-2.3)*2.4,route};
+ if(route==='main')return progress<2.3?{stage:'argument',time:progress,route}:{stage:'laptop',time:(progress-2.3)*2.4,route};
  if(progress>=4)return {stage:'after',time:5,route};
  if(progress<.85)return {stage:'argument',time:0,route};
  if(progress<1.75)return {stage:'push',time:(progress-.85)/.9*3.2,route};

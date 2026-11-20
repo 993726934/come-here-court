@@ -1,10 +1,10 @@
-import {reviseMain} from './main-story.js?v=1.7';
-export const VERSION='1.7.0';
-export const ROUTES={main:'失控的一脚',defense:'没有停下的攻击',doubt:'看不清的关键片段'};
+import {reviseMain} from './main-story.js?v=1.8';
+export const VERSION='1.8.0';
+export const ROUTES={main:'电脑砸下的那一刻',defense:'没有停下的攻击',doubt:'看不清的关键片段'};
 export const LIFE={project:'帮同学去图书馆还书',family:'到校园广播站试录节目',field:'帮电影社布置露天放映'};
 export const LIFE_SENDERS={project:'借书的同学',family:'广播站搭档',field:'电影社同学'};
 export const LIFE_MESSAGES={project:'上午约好一起去图书馆还书，这都21:05了，你还来不来？',family:'上午说好来广播站试录，这都21:05了，你还来不来？',field:'上午说好的电影社露天放映，这都21:05了，你还来不来？'};
-export const INCIDENTS=[['18:42:10','双方在教学楼外争执。'],['18:42:18','林予安催促修改文稿，双方争吵。'],['18:42:25','周启明用手指向林予安鼻尖。'],['18:42:34','林予安踢踹周启明，周启明失衡。'],['18:42:39','周启明面部碰撞台阶，陈哲上前制止。']];
+export const INCIDENTS=[['18:42:10','双方在教学楼外争执。'],['18:42:18','林予安催促修改文稿，双方争吵。'],['18:42:25','周启明指向林予安，出言警告。'],['18:42:34','林予安举起笔记本电脑砸向周启明头面部。'],['18:42:39','周启明受击倒地，陈哲上前呼救。']];
 const L=(who,text,extra={})=>({who,text,...extra});
 const C=(id,title,place,time,world,lines,docs=[])=>({id,title,place,time,world,lines,docs});
 export function buildFullStory(route='main',life='project',appeal=false){
@@ -69,7 +69,7 @@ export function buildFullStory(route='main',life='project',appeal=false){
  L('沈审判长','起诉书副本是否收到？何时收到？'),
  L('你 · 林予安','已经收到，送达时间见记录。距今天开庭已超过十日。'),
  L('旁白','审判长宣布合议庭成员、书记员、公诉人、辩护人等人员名单，并告知相关权利。'),
- L('沈审判长','对有关人员是否申请回避？',{choices:[['不申请回避','recusal','no'],['先了解回避的适用情形','info','recusal']]}),
+ L('沈审判长','被告人林予安，对刚才宣布的有关人员是否申请回避？',{choices:[['不申请回避','recusal','no'],['先了解回避的适用情形','info','recusal']]}),
  L('沈审判长','你可以进行辩护，对证据发表意见，依法提出申请。辩论结束后，你还有最后陈述的机会。'),
  L('你 · 林予安','听清楚了。')],['rights','rules']),
  C('charge','07 / 听见自己的名字','刑事审判庭','法庭调查 · 宣读起诉书与陈述','court',[
@@ -161,5 +161,8 @@ export function buildStory(route='main',life='project',appeal=false){
  const keep={promise:[0,1,2,3,5,6,7],conflict:[0,1,2,3,4,5,6,7,9,10,11,12,13,14],summons:[0,3,6],lawyer:[4,6,7],opening:[0,2,7,8,9],charge:[0,1,3,4],video:[0,1,2,3,4],injury:[0,1,3,4],witness:[0,1,2,5,6],mitigation:[0,1,2],debate:[0,1,3,5],statement:[0,1,2,4],record:[0,3],verdict:route==='main'?[1,2,4,5,6,7,8]:[1,2,3,4,5,6],after:appeal?[0,1]:[0,2,3,5,7],finish:[0]};
  const chapters=buildFullStory(route,life,appeal);
  if(route==='main')reviseMain(chapters,life);
- return chapters.filter(c=>keep[c.id]).map((c,i)=>({...c,title:c.id==='finish'?c.title:`${String(i+1).padStart(2,'0')} / ${c.title.split(' / ')[1]}`,lines:route==='main'&&['promise','conflict'].includes(c.id)?c.lines:c.lines.filter((_,n)=>keep[c.id].includes(n))}));
+ const result=chapters.filter(c=>keep[c.id]).map((c,i)=>({...c,title:c.id==='finish'?c.title:`${String(i+1).padStart(2,'0')} / ${c.title.split(' / ')[1]}`,lines:route==='main'&&['promise','conflict'].includes(c.id)?c.lines:c.lines.filter((_,n)=>keep[c.id].includes(n))}));
+ const advice=result.find(c=>c.id==='lawyer');advice.world='corridor';advice.place='法院候审区';advice.time='开庭前 08:55 · 律师低声提醒';for(const l of advice.lines)delete l.leavingOffice;
+ const opening=result.find(c=>c.id==='opening');opening.lines.splice(1,0,{who:'旁白',text:'审判长敲响法槌。',gavel:true});
+ return result;
 }

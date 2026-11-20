@@ -10,7 +10,7 @@ function defenseSlide(group){
  ctx.fillStyle='#17292d';ctx.fillRect(0,0,960,480);
  ctx.fillStyle='#d8e4e2';ctx.font='bold 36px Microsoft YaHei';ctx.fillText('校创项目组  /  比赛答辩',56,79);
  ctx.fillStyle='#f4f2e5';ctx.font='bold 80px Microsoft YaHei';ctx.fillText('明早 09:00',53,184);
- ctx.fillStyle='#b5c6c4';ctx.font='31px Microsoft YaHei';ctx.fillText('现在 18:35   ·   合稿截止 20:30',58,243);
+ ctx.fillStyle='#b5c6c4';ctx.font='31px Microsoft YaHei';ctx.fillText('现在 18:30   ·   合稿截止 20:30',58,243);
  ctx.fillStyle='#e9ba6b';ctx.fillRect(56,305,848,111);
  ctx.fillStyle='#231b13';ctx.font='bold 60px Microsoft YaHei';ctx.fillText('今晚合稿，林予安负责',82,382);
  const map=new T.CanvasTexture(canvas);map.colorSpace=T.SRGBColorSpace;

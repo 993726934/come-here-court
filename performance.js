@@ -97,7 +97,10 @@ export function human(g,x,z,{rot=0,sit=false,color=0x333b40,hair=0x211b17,attire
  phone.rotation.set(.1,0,-.22);
  phone.visible=false;
  arms[1].hand.add(phone);
- const rig={root,body,head,jaw,mouth,arms,legs,eyes,brows,phone,sit,index,home:new T.Vector3(x,0,z),rot,scene:g,role:'',phase:index*1.731};root.userData.rig=rig;actors.push(rig);return root;
+ const computer=new T.Group();const casing=new T.MeshStandardMaterial({color:0x68707a,metalness:.55,roughness:.39});const base=new T.Mesh(new T.BoxGeometry(.32,.018,.23),casing);computer.add(base);const lid=new T.Mesh(new T.BoxGeometry(.32,.2,.014),casing);lid.position.set(0,.1,-.11);computer.add(lid);computer.position.set(0,-.03,.12);computer.visible=false;arms[1].hand.add(computer);
+ const gavel=new T.Group();const wood=new T.MeshStandardMaterial({color:0x653d29,roughness:.55});const handle=new T.Mesh(new T.CylinderGeometry(.009,.012,.22,12),wood);gavel.add(handle);const hammer=new T.Mesh(new T.CylinderGeometry(.033,.033,.105,20),wood);hammer.rotation.z=Math.PI/2;hammer.position.y=.11;gavel.add(hammer);gavel.visible=false;arms[1].hand.add(gavel);
+ const droppedComputer=computer.clone();droppedComputer.visible=false;droppedComputer.position.set(.6,.035,-2.3);droppedComputer.rotation.set(0,.6,0);g.add(droppedComputer);
+ const rig={droppedComputer,computer,gavel,root,body,head,jaw,mouth,arms,legs,eyes,brows,phone,sit,index,home:new T.Vector3(x,0,z),rot,scene:g,role:'',phase:index*1.731};root.userData.rig=rig;actors.push(rig);return root;
 }
 let detail={},lineTime=0,speech=null,fightElapsed=0;
 function stageFor(text=''){return /周启明推了/.test(text)?'push':/停！|站在你们中间|上前劝阻|他打了我|他还在追|事情发生/.test(text)?'separate':/甩开|后退中反击|混乱中/.test(text)?'chase':/叫救护车|急救|报警|现场等|未读消息/.test(text)?'after':'separate';}
@@ -121,13 +124,16 @@ export function fightPose(stage,t,route='main'){
   p.fall=smooth(1.15,2.8,t);
   p.zhouX+=smooth(.9,2.4,t)*.5;
  }
- if(stage==='after'&&route==='main'){return fightPose('kick',5,route);}
+ if(stage==='laptop'){p.linX=-.48;p.zhouX=.48;p.chenX=1.8;p.strike=pulse(.2,.85,1.35,t);p.zhouLean=smooth(.92,1.5,t)*.3;p.fall=smooth(1.15,2.8,t);}
+ if(stage==='after'&&route==='main'){return fightPose('laptop',5,route);}
  if(stage==='after'){Object.assign(p,fightPose('chase',5,route));}
  return p;
 }
 export function updatePerformance(dt,t,current,reduced=false,replay){if(!replay){lineTime+=dt;fightElapsed+=dt;}const visible=actors.filter(r=>r.scene.visible);const speaking=visible.find(r=>r.role===detail.who);let energy=0;if(speech&&speech.who===detail.who){if(speech.analyser){speech.analyser.getByteTimeDomainData(speech.data);let sum=0;for(const x of speech.data)sum+=((x-128)/128)**2;energy=clamp(Math.sqrt(sum/speech.data.length)*5,0,1);}else if(lineTime<speech.duration)energy=(.35+.3*Math.sin(t*23))*(.7+.3*Math.sin(t*7));}
- for(const r of visible){if(!reduced)for(const [i,lock]of (r.root.userData.hairLocks||[]).entries())lock.rotation.z=Math.sin(t*1.8+i*.21)*.008;r.phone.visible=false;r.root.visible=!(r.scene.name==='court'&&r.role==='陈哲'&&detail.chapter!=='witness');const a=t+r.phase;r.body.rotation.set(0,0,0);r.body.position.y=(r.sit?.67:.96)+Math.sin(a*1.5)*.003;r.head.rotation.set(Math.sin(a*.63)*.018,Math.sin(a*.33)*.035,Math.sin(a*.44)*.012);r.root.rotation.set(0,r.rot,0);r.root.position.y=r.baseY||0;r.root.position.x=r.home.x;r.root.position.z=r.home.z;
+ for(const r of visible){if(!reduced)for(const [i,lock]of (r.root.userData.hairLocks||[]).entries())lock.rotation.z=Math.sin(t*1.8+i*.21)*.008;r.droppedComputer.visible=false;r.computer.visible=false;r.gavel.visible=false;r.phone.visible=false;r.root.visible=!(r.scene.name==='court'&&r.role==='陈哲'&&detail.chapter!=='witness');const a=t+r.phase;r.body.rotation.set(0,0,0);r.body.position.y=(r.sit?.67:.96)+Math.sin(a*1.5)*.003;r.head.rotation.set(Math.sin(a*.63)*.018,Math.sin(a*.33)*.035,Math.sin(a*.44)*.012);r.root.rotation.set(0,r.rot,0);r.root.position.y=r.baseY||0;r.root.position.x=r.home.x;r.root.position.z=r.home.z;
  for(let i=0;i<2;i++){const arm=r.arms[i];arm.shoulder.rotation.set(r.sit?-.34:Math.sin(a*.47+i)*.025,0,(i?1:-1)*.06);arm.elbow.rotation.set(r.sit?-1.05:-.08,0,0);r.legs[i].hip.rotation.x=r.sit?-Math.PI/2:0;r.legs[i].knee.rotation.x=r.sit?Math.PI/2:0;const blink=(a% (4.1+r.index*.07));r.eyes[i].eye.scale.y=blink<.14?Math.max(.06,Math.abs(blink-.07)/.07):1;r.eyes[i].pupil.position.x=Math.sin(a*.42)*.002;r.brows[i].rotation.z=0;}
+ if(r.role==='书记员'&&detail.chapter==='opening'&&detail.who==='书记员'){const rise=smooth(0,.8,lineTime);r.body.position.y+=rise*.29;for(const leg of r.legs){leg.hip.rotation.x=-Math.PI/2*(1-rise);leg.knee.rotation.x=Math.PI/2*(1-rise);}}
+ if(r.role==='沈审判长'&&detail.gavel){r.gavel.visible=true;const strike=pulse(0,.38,.75,lineTime);r.arms[1].shoulder.rotation.x=-.75-strike*.65;r.arms[1].elbow.rotation.x=-.8+strike*.55;}
  if(detail.reaction&&r.scene.name==='campus'&&r.role==='你 · 林予安'){
   const tension=Math.min(1,lineTime*2.2);
   r.brows[0].rotation.z=-.41*tension;
@@ -143,9 +149,10 @@ export function updatePerformance(dt,t,current,reduced=false,replay){if(!replay)
  if(replay)stage=replay.stage;
  const time=replay?replay.time:stage==='separate'&&/他打了我|他还在追|事情发生/.test(text)?5:fightElapsed;
  const p=fightPose(stage,time,replay?.route??detail.route);
- if((replay?.route??detail.route)==='main'&&['argument','kick','after'].includes(stage)){p.linZ=-2.65;p.zhouZ=-2.65;p.chenZ=-1.75;}
+ if((replay?.route??detail.route)==='main'&&['argument','laptop','after'].includes(stage)){p.linZ=-2.65;p.zhouZ=-2.65;p.chenZ=-1.75;}
  if(replay?.route==='doubt'&&stage==='after')p.fall=1;lin.root.position.set(p.linX,0,p.linZ);zhou.root.position.set(p.zhouX,0,p.zhouZ);chen.root.position.set(p.chenX,0,p.chenZ);lin.root.rotation.y=p.linTurn;zhou.root.rotation.y=p.zhouTurn;chen.root.rotation.y=p.chenTurn;
  if(detail.pointing){zhou.arms[1].shoulder.rotation.x=-1.1;zhou.arms[1].elbow.rotation.x=-.35;}
+ if((replay?.route??detail.route)==='main'&&['argument','laptop'].includes(stage)){lin.computer.visible=true;lin.arms[1].shoulder.rotation.x=-.65;lin.arms[1].elbow.rotation.x=-1.2;lin.arms[0].shoulder.rotation.x=-.75;lin.arms[0].elbow.rotation.x=-1.05;}
  if(stage==='argument'){
   const speaker=detail.who===lin.role?lin:zhou;
   const listener=speaker===lin?zhou:lin;
@@ -182,6 +189,8 @@ export function updatePerformance(dt,t,current,reduced=false,replay){if(!replay)
   zhou.root.position.y+=.012-fallBounds.min.y;
  }
  for(let i=0;i<2;i++){lin.legs[i].hip.rotation.x=Math.sin(t*13+i*Math.PI)*.58*p.walk;lin.legs[i].knee.rotation.x=Math.max(0,Math.sin(t*13+i*Math.PI))*.8*p.walk;chen.arms[i].shoulder.rotation.z=(i?1:-1)*p.separate*.65;}
+ if(stage==='laptop'){lin.computer.visible=true;lin.arms[1].shoulder.rotation.x=-.75-p.strike*1.5;lin.arms[1].elbow.rotation.x=-1.15+p.strike*.8;lin.body.rotation.z=p.strike*.12;zhou.arms[0].shoulder.rotation.x=-smooth(.9,1.5,time)*1.4;}
+ if((replay?.route??detail.route)==='main'&&(stage==='after'||(stage==='laptop'&&time>1.3))){lin.computer.visible=false;lin.droppedComputer.visible=true;}
  if(p.kick){lin.legs[1].hip.rotation.x=-p.kick*1.05;lin.legs[1].knee.rotation.x=pulse(.1,.4,.9,p.kick)*.65;lin.body.rotation.x=-p.kick*.12;}
  }
 }

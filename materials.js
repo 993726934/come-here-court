@@ -1,10 +1,12 @@
-import {INCIDENTS} from './story.js?v=1.7';
+import {renderProjectChat} from './project-chat.js?v=1.8';
+import {INCIDENTS} from './story.js?v=1.8';
 const row=(a,b)=>`<div class="doc-row"><strong>${a}</strong><span>${b}</span></div>`;
 const doc=(title,body)=>`<div class="document"><div class="stamp">虚构教学材料</div><h3>${title}</h3>${body}</div>`;
 export const TITLES={chat:'项目群聊天记录',indictment:'起诉书副本',rights:'诉讼权利',rules:'法庭规则',issues:'三个待查明的问题',video:'现场影像与时间线',injury:'伤情鉴定意见',witness:'证人证言',aftermath:'到案与事后材料',record:'庭审笔录',judgment:'判决书与权利'};
 function originalMaterial(key,state){const main=state.route==='main',def=state.route==='defense';
 switch(key){
 case'chat':{
+ if(state.route==='main')return renderProjectChat(3);
  const messages=state.route==='main'?[['18:36','林予安','你这部分数据和原始记录对不上，结论也反了。20:30交合稿，现在一起改？'],['18:37','周启明','我跟女朋友在一起，晚点再说。你先合不就行了？'],['18:38','林予安','会影响明早答辩分数。我带原始记录下来，东教学楼门口，当面说。']]:[
    ['17:12','周启明','谁改了最后一版文件？'],
    ['17:13','林予安','我只改了展示页面，原文件还在。'],
@@ -106,6 +108,6 @@ case'judgment':{
 default:return '';
 }}
 export function videoFacts(route){return route==='main'?INCIDENTS:route==='defense'?[INCIDENTS[0],['18:42:18','周启明先推打林予安。'],['18:42:25','陈哲劝阻，对方绕过继续追打。'],['18:42:34','林予安后退，抬手反击制止侵害。'],['18:42:39','危险解除，林予安立即停手。']]:[INCIDENTS[0],['18:42:18','周启明先推打林予安。'],['18:42:25','关键时段影像开始缺失。'],['18:42:34','关键动作无法从影像确认。'],['18:42:39','后段可见周启明倒地，但不能据此补齐缺失过程。']];}
-export const LEGAL='<p>本作根据已讨论的虚构剧本制作。适用中国大陆刑事诉讼场景，采用一审普通程序。人物、机构名称和文书均为虚构教学设定。</p><p><a href="https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2025/art_48b3b0c3f954448e996602a71fc6f878.html" target="_blank" rel="noopener">《中华人民共和国刑事诉讼法》</a>：第12、55、187、190—200、202、207、227、230条等，分别涉及定罪原则、证据标准、庭前准备、庭审、宣判、笔录与上诉。</p><p><a href="https://fgk.chinatax.gov.cn/zcfgk/c100009/c5212248/content.html" target="_blank" rel="noopener">《中华人民共和国刑法》</a>：第20、67、72、73、76、234条等，涉及防卫、自首、缓刑与故意伤害。</p><p><a href="https://www.court.gov.cn/zixun/xiangqing/251801.html" target="_blank" rel="noopener">两高一部正当防卫指导意见</a>：结合行为人当时处境审查，不以谁先动手、伤情大小或固定秒数单独决定。</p><p>笔录核对依刑事诉讼法第二百零七条设置。本篇采用本次庭审结束后当日留在审判庭核对的安排。证人证言部分在庭上供证人阅读确认，当事人阅读其笔录并可请求补充、改正，确认无误后签名或盖章。</p><p>程序文字为教学节选，核对基于本次对话所查官方文本。正式面向学生开放前应结合适用规范，由法律实务人员审阅。没有自动开除学籍、就业一律受限或家属连带受罚的预设。</p><p>本站仅在本机保存进度、选项与设置，不采集真实姓名、学号或证件。签写笔迹只留在当前页面，不上传。平台访问与登录日志由平台处理。配音为本机普通话语音引擎合成，非真人表演。</p>';
+export const LEGAL='<p>本作根据已讨论的虚构剧本制作。适用中国大陆刑事诉讼场景，采用一审普通程序。人物、机构名称和文书均为虚构教学设定。</p><p><a href="https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/bgt/art/2025/art_48b3b0c3f954448e996602a71fc6f878.html" target="_blank" rel="noopener">《中华人民共和国刑事诉讼法》</a>：第12、55、187、190—200、202、207、227、230条等，分别涉及定罪原则、证据标准、庭前准备、庭审、宣判、笔录与上诉。</p><p><a href="https://fgk.chinatax.gov.cn/zcfgk/c100009/c5212248/content.html" target="_blank" rel="noopener">《中华人民共和国刑法》</a>：第20、67、72、73、76、234条等，涉及防卫、自首、缓刑与故意伤害。</p><p><a href="https://www.court.gov.cn/zixun/xiangqing/251801.html" target="_blank" rel="noopener">两高一部正当防卫指导意见</a>：结合行为人当时处境审查，不以谁先动手、伤情大小或固定秒数单独决定。</p><p>开庭法槌动作依据<a href="https://www.sdcourt.gov.cn/jningqffy/385482/385460/12287429/index.html" target="_blank" rel="noopener">法院公布的庭审行为规范</a>，先敲击一次，再宣布开庭。</p><p>笔录核对依刑事诉讼法第二百零七条设置。本篇采用本次庭审结束后当日留在审判庭核对的安排。证人证言部分在庭上供证人阅读确认，当事人阅读其笔录并可请求补充、改正，确认无误后签名或盖章。</p><p>程序文字为教学节选，核对基于本次对话所查官方文本。正式面向学生开放前应结合适用规范，由法律实务人员审阅。没有自动开除学籍、就业一律受限或家属连带受罚的预设。</p><p>本站仅在本机保存进度、选项与设置，不采集真实姓名、学号或证件。签写笔迹只留在当前页面，不上传。平台访问与登录日志由平台处理。配音为本机普通话语音引擎合成，非真人表演。</p>';
 
-export function material(key,state){let html=originalMaterial(key,state);if(state.route!=='main')return html;const changes=[['双方被劝开后，林予安追上周启明，击打其面部','因文稿争议，林予安踢踹周启明，致其失衡倒地、面部碰撞台阶'],['周启明先推打；双方分开后，林予安从旁边追上击打。','周启明用手指鼻；林予安踢踹后，周启明失衡倒地。'],['周启明先行推打林予安，陈哲将双方分开。周启明转身离开后，林予安追上击打','双方因文稿争议发生口角。周启明指鼻，林予安踢踹对方，致其失衡倒地、面部碰撞台阶'],['林予安在侵害结束后追上击打','林予安因口角实施踢踹伤害行为'],['被害人先行推打的过错、',''],['参与劝架','现场目击并制止冲突']];for(const [a,b]of changes)html=html.replaceAll(a,b);return html;}
+export function material(key,state){let html=originalMaterial(key,state);if(state.route!=='main')return html;const changes=[['双方被劝开后，林予安追上周启明，击打其面部','因文稿争议，林予安持笔记本电脑击打周启明头面部'],['周启明先推打；双方分开后，林予安从旁边追上击打。','周启明用手指鼻；林予安持电脑击打周启明头面部，周启明倒地。'],['周启明先行推打林予安，陈哲将双方分开。周启明转身离开后，林予安追上击打','双方因文稿争议发生口角。周启明指鼻，林予安持笔记本电脑击打对方头面部'],['林予安在侵害结束后追上击打','林予安因口角持笔记本电脑击打他人头面部'],['被害人先行推打的过错、',''],['参与劝架','现场目击并制止冲突']];for(const [a,b]of changes)html=html.replaceAll(a,b);return html;}
